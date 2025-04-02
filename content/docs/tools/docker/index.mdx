@@ -1,0 +1,42 @@
+---
+title: Docker
+description: Common usage with Docker
+---
+
+# Common usage with Docker
+
+-   **What is a Dockerfile?**  
+    A Dockerfile is a high-level script containing instructions for building a Docker image.
+
+-   **What is a Docker image?**  
+    The Docker image is a snapshot of the environment, including the base OS, dependencies, and app files.
+
+    It is an instruction set of how Linux namespaces and c-groups should be configured.
+
+-   **How does it work?**
+
+    1. When `docker build` runs (ie. Docker CLI), Docker serializes the Docker file into a layered, immutable image, which in simpler terms means its an instruction set how the daemon should create the app within the namespace and c-groups in Linux.
+       For example if its a C# app - fetching the ASP.NET runtime and .NET SDK. Otherwise, it cannot compile or even run the .dll.
+       So the the Docker file only contains higher level instructions to restore (nuget packages) and compile a C# project if we are talking about a C# project, but it could be anything.
+
+    2. The Docker Daemon (`dockerd`) reads the image and uses Linux kernel features to isolate and manage the container:
+
+        - **Namespaces**: Ensure process, network, and filesystem isolation.
+          So Namespaces is a feature of the Linux kernel that partitions kernel resources such that one set of processes sees one set of resources while another set of processes sees a different set of resources.
+
+        - **Cgroups**: Limit resource usage (CPU, memory, etc.).
+
+-   **What happens when the container runs?**  
+    The container runs the application in an isolated environment as defined by the `CMD` or `ENTRYPOINT` in the Dockerfile.
+
+-   **Quick Analogy:**
+
+    -   The **Dockerfile** is like a recipe.
+    -   The **Docker image** is the prepared dish, ready to serve.
+    -   The **Docker Daemon** (`dockerd`) is the chef who reads the recipe, prepares the dish, and serves it.
+
+-   **Architecture:**
+    Layer 0 - Hardware
+    Layer 1 - BIOS
+    Layer 2 - Hypervisor (either HyperV (Win), HyperKit (macOS))
+    Layer 3 - A virtual machine that runs a lightweight Linux instance. This is where the docker daemon lives so it can use the Linux features of `Namespaces` and `C-groups`, which makes the actual "Container"!

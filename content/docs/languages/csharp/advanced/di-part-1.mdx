@@ -1,0 +1,192 @@
+---
+title: Dependency Injection | Part 1
+description: Start developing with C#
+---
+
+### What is "Dependency Injection" or "DI" for short?
+
+-   It is a architecture design pattern how to write and design code. It's not "special" for C#, it is applicable for any language basically.
+
+> #### Then what is Dependency Inversion Principle or "DIP" within the context of Dependency Injection?
+
+-   "DIP" states that:
+    -   High-level modules should not depend on low-level modules.
+    -   Both should depend on abstractions (for example an Interface).
+    -   Abstractions should not depend on details.
+    -   Details (an implementation) should depend on abstractions.
+
+#### So in a nutshell: You're just passing arguments, that's it!
+
+-   Now, how do we use this?
+
+#### Without Dependency injection:
+
+Here, we first create an instance of DataType and call it "dataTypeInstance".
+In our Client constructor, we don't pass anything as seen, we just set the Client class instance "dataTypeInstance" to a new DataType(). This could be anything like a Class or an Interface for example.
+More on that later.
+
+Now, this means we have hardcoded the dependency to our Client class. It makes it hard to maintain when the code gets large.
+
+```csharp
+public class Client
+{
+    private DataType dataTypeInstance;
+
+    Client()
+    {
+        this.dataTypeInstance = new DataType();
+    }
+}
+```
+
+#### Now let's imagine this:
+
+```csharp
+public class Client
+{
+    private DataType dataTypeInstance;
+    private DataTypeTwo dataTypeInstanceTwo;
+    private DataTypeThree dataTypeInstanceThree;
+    private DataTypeFour dataTypeInstanceFour;
+    private DataTypeFive dataTypeInstanceFive;
+
+    Client()
+    {
+        this.dataTypeInstance = new DataType();
+        this.dataTypeInstanceTwo = new DataTypeTwo();
+        this.dataTypeInstanceThree = new DataTypeThree();
+        this.dataTypeInstanceFour = new DataTypeFour();
+        this.dataTypeInstanceFive = new DataTypeFive();
+    }
+}
+```
+
+This could continue with 30+ more objects.. it will be a nightmare to maintain!
+
+#### With Dependency injection:
+
+Here, we first create an instance of DataType and call it "dataTypeInstance".
+In our Client constructor, we pass a type of DataType called "someDataTypeInstance".
+
+Within the constructor body, we set the Client class instance of "dataTypeInstance" to the "someDataTypeInstance", which is what is passed to the constructor when someone wants to create a new Client.
+
+```csharp
+public class Client
+{
+    private DataType dataTypeInstance;
+
+    Client(DataType someDataTypeInstance)
+    {
+        this.dataTypeInstance = someDataTypeInstance;
+    }
+}
+```
+
+#### Now imagine this:
+
+```csharp
+public class Client : IDataType
+{
+    private DataType dataTypeInstance;
+
+    Client(DataType someDataTypeInstance)
+    {
+        this.dataTypeInstance = someDataTypeInstance;
+    }
+}
+
+public interface IDataType
+{
+    List<DataType> DataTypes;
+}
+```
+
+> ### Recap: What happened here?
+
+In the first example, when someone wants to create a Client, the Client is also instantiating an instance of DataType.
+Within the constructor, the Clients instance of "dataTypeInstance" is set to a new DbContext.
+This means that "dataTypeInstance" will have all of the properties that DbContext has.
+
+#### So, let's say that DbContext have the following property:
+
+```csharp
+public class DbContext
+{
+    string connectiongString { get; } = "server=localhost;port=1000;username=admin;password=SuperPasSw0rd";
+}
+```
+
+#### Now, "dataTypeInstance" can call DbContext like this:
+
+#### So, let's say that DataType have these properties:
+
+```csharp
+public class DataType  : DbContext
+{
+    private readonly string connection;
+
+    DataType(DbContext connection)
+    {
+        this.connection = connection;
+    }
+}
+```
+
+---
+
+#### With Setter injection:
+
+Here we initialize a new instance of Service through the setter method.
+
+```csharp
+public class Client
+{
+    private Service service;
+
+    public void setService(Service service)
+    {
+        this.service = service;
+    }
+}
+```
+
+#### With Interface injection:
+
+```csharp
+public interface ServiceSetter
+{
+    public void setService(Service service);
+}
+
+public class Client implements ServiceSetter
+{
+    private Service service;
+
+    @Override
+    public void setService(Service service)
+    {
+        this.service = service;
+    }
+}
+
+public class ServiceInjector
+{
+    private Set<ServiceSetter> clients;
+
+    public void inject(ServiceSetter client)
+    {
+        this.clients.add(client);
+        client.setService(new ExampleService());
+    }
+
+    public void switch()
+    {
+        for (Client client : this.clients) {
+            client.setService(new AnotherExampleService());
+        }
+    }
+}
+
+public class ExampleService implements Service {}
+public class AnotherExampleService implements Service {}
+```

@@ -1,0 +1,170 @@
+---
+title: Dependency Injection | Part 2
+description: Start developing with C#
+---
+
+**Let's continue and break it down even further..**
+
+This is an application using dependency injection in just one file called Program.cs.
+I think this makes most sense just because it's one file, it's easier to follow.
+
+File structure:
+
+<img alt="ascii table" src="/img/vs_di_structure.png" width="400" height="400" />
+
+#### Program.cs
+
+    using SimpleInjector;
+
+The first using statement within Program.cs is a Nuget package called "SimpleInjector".
+It's a nice package and makes it easy for us to register dependencies within a container.
+More on what the container does later.
+
+---
+
+Main start:
+We will come back to Main later. But as you can see and probably figure out, we are creating a container and registering dependencies within that container.
+However, let's continue...
+
+```csharp
+namespace DependencyInjectionDemo;
+
+class Program
+{
+    static void Main()
+    {
+        var container = new Container();
+
+        container.Register<IConnection, AppConnectionSettings>();
+        container.Register<IDbContext, DbContext>();
+        container.Register<ModelService>();
+        container.Verify();
+
+        var modelService = container.GetInstance<ModelService>();
+        var models = modelService.GetSomeModels();
+
+        foreach (var model in models)
+        {
+            Console.WriteLine(model.Name);
+        }
+    }
+}
+```
+
+Let's create a model.
+The most common thing a model does is to represent how an object should "look" like or what kind of properties or behaviour it should have.
+
+In most cases, think that a model represents a table in a database.
+So, it's usually something like "Customer" or whatever. The "Customer" table has X amout of properties, like:
+
+-   int Id;
+-   string Name;
+-   string Employee;
+
+In this instance, the model only has an Id and a Name. The Id usually gets special treatment though. This is because it's such a comming practise to have an Id so when you create a model using some kind of .NET framework, such as "Entity Framework", you don't have to worry about it, the Id you have specified will be the primary key and get auto incremented.
+But - you can of course make your own adjustments and make things clear. For example use the attribute [Key] above the Id, like this:
+
+```csharp
+[Key]
+public int Id { get; set; }
+```
+
+This allows you to explicit say that Id is the primary key by using something called "Data Annotations".
+
+More on that here: https://www.c-sharpcorner.com/article/dataannotations-in-depth/
+
+---
+
+Let's continue with our model...
+
+```csharp
+public class Model
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
+}
+
+public class GetModelByName
+{
+    public string Name { get; set; }
+}
+
+public class ModelService
+{
+    private readonly IDbContext modelcontext;
+
+    public ModelService(IDbContext modelcontext)
+    {
+        this.modelcontext = modelcontext;
+    }
+
+    public IEnumerable<GetModelByName> GetSomeModels()
+    {
+        var totalModels = new Random().Next(5, 10);
+
+        var allModels = this.modelcontext
+            .CreateModels()
+            .Where(m => m.Name != null)
+            .Take(totalModels)
+            .Select(c => new GetModelByName
+            {
+                Name = c.Name
+            })
+            .ToList();
+
+        return allModels;
+    }
+}
+```
+
+#### Abstractions starts here:
+
+```csharp
+public class DbContext : IDbContext
+{
+    private readonly string connection;
+    public DbContext(IConnection connection)
+    {
+        this.connection = connection.ConnectionString;
+    }
+
+    public List<Model> CreateModels() => new List<Model>
+    {
+        new Model { Id = 1, Name = "Bill Gates" }
+    };
+}
+```
+
+#### This is where things get's interesting, at least when you start learning about DIP and DI.
+
+In the AppConnectionSettings class below, we inherit from the interface IConnection.
+
+The best way to tigh everything together was to create a class that hold settings to a database.
+This is usually done in appSettings.json, so think about it as a very simple configuration file.
+
+You will use a .json file in most cases but until you have wrapped your head around the concept of DIP and DI, I'll use this as a simple example how to get the configuration to your database.
+I will cover an entire project with a .json file and other files later.
+
+So..
+
+-   The IConnection interface is an abstraction that will return a connectionString. However, if you have read the Interface section, you know that an interface doesn't do any implementations. If a class inherits from an interface, the class has to do the implementation.
+
+-   In a nutshell: A class that inherits from an interface must do an implementation of each interface it inherits from.
+    The end result is that a clas will have more properties or behaviours than it had before.
+
+```csharp
+public class AppConnectionSettings : IConnection
+{
+    public string ConnectionString { get; } = "server=db.cloud.com;port=1234;username=admin;password=suP3rPassw0rd";
+}
+
+public interface IDbContext
+{
+    List<Model> CreateModels();
+}
+
+public interface IConnection
+{
+    string ConnectionString { get; }
+}
+```

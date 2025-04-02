@@ -1,0 +1,20 @@
+---
+title: Dependency Injection
+description: Start developing with C#
+---
+
+# Containers
+
+Whenver we need to register a service/contex or something, the best way is to do the registration through a container.
+When the code base gets large, it will be impossible to maintain and keep track for how many arguments a constructor have after a while.
+Therefore, we use a container that returns a service for us whenever we need it.
+For example a DbContextService.
+
+<div className="bg-white dark:bg-zinc-300 p-4 rounded-xl">
+	<img
+		alt="ascii table"
+		src="https://upload.wikimedia.org/wikipedia/commons/5/5f/DependencyInjectionServiceProvider.png"
+		width="700"
+		height="600"
+	/>
+</div>

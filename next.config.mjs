@@ -1,10 +1,26 @@
-import { createMDX } from 'fumadocs-mdx/next';
+import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
-const config = {
-  reactStrictMode: true,
+const nextConfig = {
+	reactStrictMode: true,
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "*.wikimedia.org",
+				port: "443",
+				pathname: "*",
+			},
+			{
+				protocol: "https",
+				hostname: "*.geeksforgeeks.org",
+				port: "443",
+				pathname: "*",
+			},
+		],
+	},
 };
 
-export default withMDX(config);
+export default withMDX(nextConfig);

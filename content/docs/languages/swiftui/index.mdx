@@ -1,0 +1,61 @@
+---
+title: SwiftUI
+---
+
+## What is SwiftUI?
+
+Now here’s where things get interesting.
+
+SwiftUI is a framework introduced by Apple in 2019 that allows you to build user interfaces using declarative code — which is very different from how UI was built before with **UIKit** or **AppKit**.
+
+Declarative just means:
+"Tell the system what you want the UI to look like — not how to do it step by step."
+
+Example:
+
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Text("Hello, SwiftUI!")
+                .font(.title)
+            Button("Tap Me") {
+                print("Button was tapped")
+            }
+        }
+    }
+}
+```
+
+That’s a full UI layout written in just a few lines.
+
+**VStack** = vertical stack of elements\
+**Text** = shows text\
+**Button** = clickable button with a simple action
+
+**How is this different from UIKit?**\
+Before SwiftUI, you had to write imperative UI code like this:
+
+```swift
+let label = UILabel()
+label.text = "Hello"
+
+let button = UIButton(type: .system)
+button.setTitle("Tap me", for: .normal)
+button.addTarget(self, action: #selector(onTap), for: .touchUpInside)
+```
+
+With SwiftUI, you think more in components and data binding.
+
+Why SwiftUI is awesome
+It works across all Apple platforms
+
+It automatically handles dark mode, accessibility, animations, and more
+
+It plays nicely with Swift's powerful language features
+
+It integrates beautifully with Xcode’s live previews
+
+SwiftUI is still growing — it may not replace UIKit for everything, but it’s now the recommended way to build new apps on Apple platforms.
