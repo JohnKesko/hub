@@ -30,7 +30,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8 # or 10 if you're using pnpm 10, adjust accordingly
+          version: 10
 
       - name: Install dependencies
         run: pnpm install
