@@ -46,7 +46,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Build with Next.js
-        run: pnpm next build && pnpm next export
+        run: |
+          set -e
+          pnpm next build || { echo "Next.js build failed"; exit 1; }
+          pnpm next export || { echo "Next.js export failed"; exit 1; }
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
