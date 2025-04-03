@@ -46,12 +46,13 @@ jobs:
       - name: Build with Next.js
         run: |
           set -e
-          pnpm next build || { echo "Next.js build failed"; exit 1; }
+          pnpm next build
+          pnpm next export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./next
+          path: ./out
 
   deploy:
     environment:
