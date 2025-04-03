@@ -21,7 +21,6 @@ const nextConfig = {
 			},
 		],
 	},
-	output: "export",
 };
 
 export default withMDX(nextConfig);
