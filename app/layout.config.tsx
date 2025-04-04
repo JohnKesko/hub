@@ -14,7 +14,7 @@ export const baseOptions: BaseLayoutProps = {
 				<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
 					<circle cx={12} cy={12} r={12} fill="currentColor" />
 				</svg>
-				My App
+				Docs Hub
 			</>
 		),
 	},
@@ -24,5 +24,11 @@ export const baseOptions: BaseLayoutProps = {
 			url: "/docs",
 			active: "nested-url",
 		},
+		{
+			text: "Projects",
+			url: "/projects",
+			active: "nested-url",
+		},
 	],
+	githubUrl: "https://github.com/johnkesko",
 };

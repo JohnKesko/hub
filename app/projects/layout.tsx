@@ -6,7 +6,7 @@ import { baseOptions } from "@/app/layout.config";
 
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 
-export default function DocshubLayout({ children }: { children: ReactNode }) {
+export default function ProjectsLayout({ children }: { children: ReactNode }) {
 	return (
 		<DocsLayout tree={source.pageTree} {...baseOptions}>
 			{children}

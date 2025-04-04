@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import defaultMdxComponents, { createRelativeLink } from "fumadocs-ui/mdx";
 import { DocsPage, DocsBody, DocsDescription, DocsTitle } from "fumadocs-ui/page";
 
-export default async function DocshubPage(props: { params: Promise<{ slug?: string[] }> }) {
+export default async function ProjectsPage(props: { params: Promise<{ slug?: string[] }> }) {
 	const params = await props.params;
 	const page = source.getPage(params.slug);
 	if (!page) notFound();
