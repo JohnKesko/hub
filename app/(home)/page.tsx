@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ArrowRight, Book, Code, Github, Layers, Monitor, Apple, Hash, Container } from "lucide-react";
+import { ArrowRight, Book, Code, Layers, Monitor, Apple, Hash, Container } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import ActionSearchBar from "@/components/custom/search-bar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function HomePage() {

@@ -32,7 +32,9 @@ function ActionSearchBar({ actions = [], onFocusChange, size = "default" }: Acti
 	const [query, setQuery] = useState("");
 	const [result, setResult] = useState<SearchResult | null>(null);
 	const [isFocused, setIsFocused] = useState(false);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [isTyping, setIsTyping] = useState(false);
+
 	const [selectedAction, setSelectedAction] = useState<Action | null>(null);
 	const debouncedQuery = useDebounce(query, 200);
 
@@ -124,6 +126,8 @@ function ActionSearchBar({ actions = [], onFocusChange, size = "default" }: Acti
 	const inputFontSize = size === "large" ? "text-base" : "text-sm";
 	const inputPadding = size === "large" ? "px-5 py-3" : "px-3 py-1.5";
 	const iconSize = size === "large" ? "h-5 w-5" : "h-4 w-4";
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const labelSize = size === "large" ? "text-sm" : "text-xs";
 	const resultWidth = size === "large" ? "max-w-2xl" : "max-w-sm";
 
