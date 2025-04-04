@@ -3,4 +3,92 @@ title: Abstractions
 description: Start developing with C#
 ---
 
--   More about abstractions here
+## Abstractions
+
+- Polymorphism
+- Interfaces
+- Abstract classes
+
+## But what is abstraction in simple terms?
+
+I think of it like a hirarchy of a company for example. <br />
+The CEO is at the top, and they don't need to know how every single employee do their job. They just need to know the employees are doing their jobs well with the tools the CEO have decided to give them. <br />
+
+## What is polymorphism in simple terms?
+
+Polymorphism is like a magic trick where one thing can be many things at the same time. <br />
+Let's say you have a toy that can be a car, a boat, or a plane. When you play with it, you can make it sound like a car, splash like a boat, or fly like a plane. That's what polymorphism is. It lets us use one thing in different ways, just like the toy can be many things at once.
+
+# Interfaces
+
+## What is an interface?
+
+An interface is like a contract that defines a set of methods and properties that a class must implement. <br />
+It's just like a contract in real life. When you sign a contract, you agree to do certain things but it doesn't tell you how to do them, you just have to do them. <br />
+
+So if we go back to the CEO example. The employees agreed to sign a contract when they joined the company. <br />
+The contract says they have to do their job well and follow the rules of the company, but it doesn't tell them how to do their job. <br />
+
+So whenever a new employee joins the company (any other class in C#), they have signd the same contract (implemented the same interface) and they have to do their job well (implement the methods and properties of that interface). <br />
+
+**Rules for interfaces:** <br />
+
+- An interface can only contain method signatures, properties, events, and indexers.
+- An interface cannot contain any implementation of the methods or properties. (in modern C# you can do a default implementation though)
+
+For example:
+
+```csharp
+public interface IAnimal
+{
+    void Speak();
+    string Name { get; set; }
+}
+```
+
+In this example, we have defined an interface called `IAnimal` that has a method called `Speak` and a property called `Name`. <br />
+Any class that implements this interface must provide an implementation for the `Speak` method and the `Name` property.
+
+## Implementing an interface
+
+To implement an interface, a class must use the `:` operator followed by the name of the interface. <br />
+The class must then provide an implementation for all the methods and properties defined in the interface. <br />
+
+> Note: A class _can_ implement multiple interfaces by separating them with a comma, it's not restricted to just one interface. <br />
+
+**For example:**
+
+```csharp
+public class Dog : IAnimal
+{
+    public string Name { get; set; }
+
+    public void Speak()
+    {
+        Console.WriteLine("Woof!");
+    }
+}
+```
+
+In this example, we have defined a class called `Dog` that implements the `IAnimal` interface. The `Dog` class provides an implementation for the `Speak` method and the `Name` property.
+
+## Using interfaces
+
+Once an interface has been defined and implemented, it can be used to create objects. For example:
+
+```csharp
+IAnimal dog = new Dog();
+dog.Name = "Fido";
+dog.Speak(); // Output: Woof!
+```
+
+In this example, we have created an object of type `IAnimal` and assigned it to a `Dog` object. We can then use the `Speak` method and the `Name` property defined in the `IAnimal` interface.
+
+## Why use interfaces?
+
+Interfaces are used to achieve abstraction and polymorphism in C#. Remember the CEO example? Any employee signed the contract but they all might do their job differently. <br />
+
+So, an interface allows you to define a common set of behaviors that _can_ be shared across different classes _but_ implemented in various ways. <br />
+
+Remember, just because an interface can be implemented in different ways, it doesn't mean it has to be. <br />
+You can have multiple classes that implement the same interface in the same way, but when you've reached that point, you should probably create a shared service. However, now you are in another territory, more on that later. <br />

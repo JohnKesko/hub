@@ -3,190 +3,124 @@ title: Dependency Injection | Part 1
 description: Start developing with C#
 ---
 
-### What is "Dependency Injection" or "DI" for short?
+## What is "Dependency Injection" or "DI" for short?
 
--   It is a architecture design pattern how to write and design code. It's not "special" for C#, it is applicable for any language basically.
+> Dependency Injection is a abstract concept that is used in software development. <br />
+> It is not special to C# or .NET, it's a common design pattern used in many programming languages.
 
-> #### Then what is Dependency Inversion Principle or "DIP" within the context of Dependency Injection?
+## General
 
--   "DIP" states that:
-    -   High-level modules should not depend on low-level modules.
-    -   Both should depend on abstractions (for example an Interface).
-    -   Abstractions should not depend on details.
-    -   Details (an implementation) should depend on abstractions.
+- It is a technique in which an object receives its dependencies from an external source rather than creating them itself.
+- This is typically done through a constructor, a factory method, or a service locator.
+- The main goal of Dependency Injection is to decouple the code, making it easier to test and maintain.
+- It allows for better separation of concerns, as the code that uses a dependency does not need to know how to create it or manage its lifecycle.
+- This makes it easier to swap out implementations, mock dependencies for testing, and manage the lifecycle of objects.
 
-#### So in a nutshell: You're just passing arguments, that's it!
+## Then what is Dependency Inversion Principle or "DIP" within the context of Dependency Injection?
 
--   Now, how do we use this?
+- "DIP" states that:
+  - High-level modules should not depend on low-level modules.
+  - Both should depend on abstractions (for example an Interface).
+  - Abstractions should not depend on details.
+  - Details (an implementation) should depend on abstractions.
+
+## Now, how do we use it?
 
 #### Without Dependency injection:
 
-Here, we first create an instance of DataType and call it "dataTypeInstance".
-In our Client constructor, we don't pass anything as seen, we just set the Client class instance "dataTypeInstance" to a new DataType(). This could be anything like a Class or an Interface for example.
-More on that later.
-
-Now, this means we have hardcoded the dependency to our Client class. It makes it hard to maintain when the code gets large.
-
 ```csharp
 public class Client
 {
-    private DataType dataTypeInstance;
+    private DataType _dataTypeInstance;
 
     Client()
     {
-        this.dataTypeInstance = new DataType();
+        _dataTypeInstance = new DataType();
     }
 }
 ```
 
-#### Now let's imagine this:
+#### What is happening here?
 
-```csharp
-public class Client
-{
-    private DataType dataTypeInstance;
-    private DataTypeTwo dataTypeInstanceTwo;
-    private DataTypeThree dataTypeInstanceThree;
-    private DataTypeFour dataTypeInstanceFour;
-    private DataTypeFive dataTypeInstanceFive;
+1. We have a class called Client.
+2. Inside the Client class, we have a private variable called "dataTypeInstance", which is of type `DataType`.
+3. In the constructor of the Client class, we are creating a new instance of DataType and assigning it to the "dataTypeInstance" variable. <br />
 
-    Client()
-    {
-        this.dataTypeInstance = new DataType();
-        this.dataTypeInstanceTwo = new DataTypeTwo();
-        this.dataTypeInstanceThree = new DataTypeThree();
-        this.dataTypeInstanceFour = new DataTypeFour();
-        this.dataTypeInstanceFive = new DataTypeFive();
-    }
-}
-```
+> **Note**: You will probably see `_dataTypeInstance` or `this.dataTypeInstance` in the constructor body, they do the exact same thing but some people prefer to use `this.dataTypeInstance` to make it clear that we are referring to the class instance itself and not a local variable somewhere else in the class.
+> It is a matter of preference but using `_dataTypeInstance` is modern C# and is the most common way to do it.
 
-This could continue with 30+ more objects.. it will be a nightmare to maintain!
+#### So... what is wrong with this?
+
+The problem with this approach is that the Client class is **tightly** coupled to the Client class. <br />
+Every time we create a new instance of Client, it will also create a new instance of DataType.
+This is fine for small applications, but as the application grows, it can become a problem.
+
+For example, if we want to change the implementation of DataType or if we want to use a different implementation of DataType, we would have to modify the Client class.
+This can lead to a lot of code duplication and make it difficult to maintain the code.
+
+#### So... ? What is the solution?
+
+The solution is to decouple the Client class from the DataType class. This can be done by using Dependency Injection.
 
 #### With Dependency injection:
 
-Here, we first create an instance of DataType and call it "dataTypeInstance".
-In our Client constructor, we pass a type of DataType called "someDataTypeInstance".
+```csharp
+public class Client
+{
+    private DataType _dataTypeInstance;
 
-Within the constructor body, we set the Client class instance of "dataTypeInstance" to the "someDataTypeInstance", which is what is passed to the constructor when someone wants to create a new Client.
+    Client(DataType dataTypeInstance)
+    {
+        _dataTypeInstance = dataTypeInstance;
+    }
+}
+```
+
+#### What is happening here?
+
+Here, we first create an instance (the private field) of DataType and call it "\_dataTypeInstance".<br />
+In our Client constructor, we pass a type of DataType called "dataTypeInstance".<br />
+Within the constructor body, we set the Client class instance of "\_dataTypeInstance" to the "dataTypeInstance", which is what is passed to the constructor when someone wants to create a new Client.
+
+#### So... what is the difference?
+
+The difference is that we are no longer creating a new instance of DataType inside the Client class. <br />
+We will not go through every variation of how an instance of DataType can be created right now. <br />
+There are multiple ways to do it, for example, the instance we are passing could be **_singleton_** or **_transient_** or **_scoped_**.
+The important part is that we are passing an instance of DataType to the Client class through the constructor and Dependency Injection Container is managing the lifecycle of that instance.
+
+This means that the Client class is no longer tightly coupled to the DataType class and can work with any implementation of DataType.
+This makes life easier to change the implementation of DataType or to use a different implementation of DataType without having to modify the entire Client class.
+It will be prominent when we start using interfaces and mocking classes for unit testing.
+
+#### But ok... now let's imagine this without Dependency Injection:
+
+You can see that we have a lot of classes that are being instantiated within the Client class. <br />
+It means every time we create a new Client, we are also creating a new instance of DataType, DataTypeTwo, DataTypeThree, DataTypeFour and DataTypeFive.
 
 ```csharp
 public class Client
 {
-    private DataType dataTypeInstance;
+    private DataType _dataTypeInstance;
+    private DataTypeTwo _dataTypeInstanceTwo;
+    private DataTypeThree _dataTypeInstanceThree;
+    private DataTypeFour _dataTypeInstanceFour;
+    private DataTypeFive _dataTypeInstanceFive;
 
-    Client(DataType someDataTypeInstance)
+    Client()
     {
-        this.dataTypeInstance = someDataTypeInstance;
+        _dataTypeInstance = new DataType();
+        _dataTypeInstanceTwo = new DataTypeTwo();
+        _dataTypeInstanceThree = new DataTypeThree();
+        _dataTypeInstanceFour = new DataTypeFour();
+        _dataTypeInstanceFive = new DataTypeFive();
     }
 }
 ```
 
-#### Now imagine this:
+#### What is wrong with this?
 
-```csharp
-public class Client : IDataType
-{
-    private DataType dataTypeInstance;
+The problem with this approach is that the Client class is tightly coupled to all of the classes that it depends on. <br />
 
-    Client(DataType someDataTypeInstance)
-    {
-        this.dataTypeInstance = someDataTypeInstance;
-    }
-}
-
-public interface IDataType
-{
-    List<DataType> DataTypes;
-}
-```
-
-> ### Recap: What happened here?
-
-In the first example, when someone wants to create a Client, the Client is also instantiating an instance of DataType.
-Within the constructor, the Clients instance of "dataTypeInstance" is set to a new DbContext.
-This means that "dataTypeInstance" will have all of the properties that DbContext has.
-
-#### So, let's say that DbContext have the following property:
-
-```csharp
-public class DbContext
-{
-    string connectiongString { get; } = "server=localhost;port=1000;username=admin;password=SuperPasSw0rd";
-}
-```
-
-#### Now, "dataTypeInstance" can call DbContext like this:
-
-#### So, let's say that DataType have these properties:
-
-```csharp
-public class DataType  : DbContext
-{
-    private readonly string connection;
-
-    DataType(DbContext connection)
-    {
-        this.connection = connection;
-    }
-}
-```
-
----
-
-#### With Setter injection:
-
-Here we initialize a new instance of Service through the setter method.
-
-```csharp
-public class Client
-{
-    private Service service;
-
-    public void setService(Service service)
-    {
-        this.service = service;
-    }
-}
-```
-
-#### With Interface injection:
-
-```csharp
-public interface ServiceSetter
-{
-    public void setService(Service service);
-}
-
-public class Client implements ServiceSetter
-{
-    private Service service;
-
-    @Override
-    public void setService(Service service)
-    {
-        this.service = service;
-    }
-}
-
-public class ServiceInjector
-{
-    private Set<ServiceSetter> clients;
-
-    public void inject(ServiceSetter client)
-    {
-        this.clients.add(client);
-        client.setService(new ExampleService());
-    }
-
-    public void switch()
-    {
-        for (Client client : this.clients) {
-            client.setService(new AnotherExampleService());
-        }
-    }
-}
-
-public class ExampleService implements Service {}
-public class AnotherExampleService implements Service {}
-```
+It will be more prominent when we start using interfaces and mocking classes for unit testing. <br />
+This can lead to a lot of code duplication and make it difficult to maintain the code. <br />

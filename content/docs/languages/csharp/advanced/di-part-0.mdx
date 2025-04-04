@@ -5,10 +5,12 @@ description: Start developing with C#
 
 # Containers
 
-Whenver we need to register a service/contex or something, the best way is to do the registration through a container.
-When the code base gets large, it will be impossible to maintain and keep track for how many arguments a constructor have after a while.
-Therefore, we use a container that returns a service for us whenever we need it.
-For example a DbContextService.
+## What is a container?
+
+A container is a abstract concept but in reality it is a class that is used to manage the lifetime of objects in your application. <br />
+So whenever you need to create an object, you can ask the container to create it for you or you can ask the container to give you an instance of an object that has already been created. <br />
+
+For example in Entity Framework, which is a ORM (Object Relational Mapper) that allows you to interact with a database using C# objects. <br />
 
 <div className="bg-white dark:bg-zinc-300 p-4 rounded-xl">
 	<img
@@ -18,3 +20,13 @@ For example a DbContextService.
 		height="600"
 	/>
 </div>
+
+## But what is a ORM?
+
+An ORM (Object Relational Mapper) is a programming technique used to convert data between incompatible type systems in object-oriented programming languages. <br />
+
+The most common use of ORM is to map database tables to classes in your application. <br />
+This allows you to interact with the database using C# objects instead of writing raw SQL queries. <br />
+
+So to be clear, you don't _need_ to use an ORM, but it makes life easier when working with databases if you don't want to remember raw SQL queries. <br />
+ORMs also provide features like lazy loading, change tracking, and caching, which can improve performance and reduce the amount of code you need to write. <br />

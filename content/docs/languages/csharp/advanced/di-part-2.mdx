@@ -3,31 +3,41 @@ title: Dependency Injection | Part 2
 description: Start developing with C#
 ---
 
-**Let's continue and break it down even further..**
+**Let’s continue and break it down a little more…**
 
-This is an application using dependency injection in just one file called Program.cs.
-I think this makes most sense just because it's one file, it's easier to follow.
-
-File structure:
-
-<img alt="ascii table" src="/img/vs_di_structure.png" width="400" height="400" />
-
-#### Program.cs
-
-    using SimpleInjector;
-
-The first using statement within Program.cs is a Nuget package called "SimpleInjector".
-It's a nice package and makes it easy for us to register dependencies within a container.
-More on what the container does later.
+This is a full application using **dependency injection (DI)**, and it’s written entirely in one file: `Program.cs`.
 
 ---
 
-Main start:
-We will come back to Main later. But as you can see and probably figure out, we are creating a container and registering dependencies within that container.
-However, let's continue...
+### File Structure
+
+Here's a simplified view of what the file structure looks like:
+
+<img alt="ascii table" src="/img/vs_di_structure.png" width="400" height="400" />
+
+---
+
+### Program.cs
+
+At the top of the file, we’re importing a NuGet package called **SimpleInjector**:
+
+```csharp
+using SimpleInjector;
+```
+
+SimpleInjector helps us set up and manage dependencies easily. It gives us a container where we register everything we want the app to know how to "inject" later on.
+There are other DI frameworks, for example Microsoft.Extensions.DependencyInjection is very common, but we’ll stick with SimpleInjector for now because it’s simple and easy to use.
+
+---
+
+### What’s happening in Main?
+
+We’ll explain each part soon, but first, take a look at the full program:
 
 ```csharp
 namespace DependencyInjectionDemo;
+
+using SimpleInjector
 
 class Program
 {
@@ -49,33 +59,19 @@ class Program
         }
     }
 }
+
 ```
 
-Let's create a model.
-The most common thing a model does is to represent how an object should "look" like or what kind of properties or behaviour it should have.
+**Here’s a breakdown:**
 
-In most cases, think that a model represents a table in a database.
-So, it's usually something like "Customer" or whatever. The "Customer" table has X amout of properties, like:
+We create a container.<br />
+We register a few types: some interfaces with their matching implementations.<br />
+We ask the container to give us a ModelService instance.<br />
+We call a method on that service and print the names of the models returned.<br />
 
--   int Id;
--   string Name;
--   string Employee;
+### What’s a Model?
 
-In this instance, the model only has an Id and a Name. The Id usually gets special treatment though. This is because it's such a comming practise to have an Id so when you create a model using some kind of .NET framework, such as "Entity Framework", you don't have to worry about it, the Id you have specified will be the primary key and get auto incremented.
-But - you can of course make your own adjustments and make things clear. For example use the attribute [Key] above the Id, like this:
-
-```csharp
-[Key]
-public int Id { get; set; }
-```
-
-This allows you to explicit say that Id is the primary key by using something called "Data Annotations".
-
-More on that here: https://www.c-sharpcorner.com/article/dataannotations-in-depth/
-
----
-
-Let's continue with our model...
+A model usually represents a table in a database. For example, customer_table, employee_table, or product_table.
 
 ```csharp
 public class Model
@@ -83,26 +79,45 @@ public class Model
     public int Id { get; set; }
     public string? Name { get; set; }
 }
+```
 
+The Id field is very common in database models and often becomes the primary key automatically when using frameworks like Entity Framework (ORM). <br />
+You can also use attributes like [Key] to mark it explicitly:
+
+```csharp
+[Key]
+public int Id { get; set; }
+```
+
+Let's continue and create a Service that will use this model.
+
+ModelService — this is where DI happens<br />
+This service depends on a database context (IDbContext) — but we don’t create the context ourselves. Instead, the container injects it for us.
+
+Let's also create a second class for returning a specific name of a model:
+
+```csharp
 public class GetModelByName
 {
     public string Name { get; set; }
 }
+```
 
+```csharp
 public class ModelService
 {
-    private readonly IDbContext modelcontext;
+    private readonly IDbContext _modelcontext;
 
     public ModelService(IDbContext modelcontext)
     {
-        this.modelcontext = modelcontext;
+        _modelcontext = modelcontext;
     }
 
     public IEnumerable<GetModelByName> GetSomeModels()
     {
         var totalModels = new Random().Next(5, 10);
 
-        var allModels = this.modelcontext
+        var allModels = _modelcontext
             .CreateModels()
             .Where(m => m.Name != null)
             .Take(totalModels)
@@ -117,15 +132,21 @@ public class ModelService
 }
 ```
 
-#### Abstractions starts here:
+Implementing the interfaces
+This is the part where Dependency Inversion Principle (DIP) and Dependency Injection (DI) really show up.
+
+Let’s break it down.
+
+DbContext – implements IDbContext
 
 ```csharp
 public class DbContext : IDbContext
 {
-    private readonly string connection;
+    private readonly string _connection;
+
     public DbContext(IConnection connection)
     {
-        this.connection = connection.ConnectionString;
+        _connection = connection.ConnectionString;
     }
 
     public List<Model> CreateModels() => new List<Model>
@@ -135,29 +156,23 @@ public class DbContext : IDbContext
 }
 ```
 
-#### This is where things get's interesting, at least when you start learning about DIP and DI.
+This class depends on an IConnection, which we’ll create next. It also creates a dummy list of models.
 
-In the AppConnectionSettings class below, we inherit from the interface IConnection.
-
-The best way to tigh everything together was to create a class that hold settings to a database.
-This is usually done in appSettings.json, so think about it as a very simple configuration file.
-
-You will use a .json file in most cases but until you have wrapped your head around the concept of DIP and DI, I'll use this as a simple example how to get the configuration to your database.
-I will cover an entire project with a .json file and other files later.
-
-So..
-
--   The IConnection interface is an abstraction that will return a connectionString. However, if you have read the Interface section, you know that an interface doesn't do any implementations. If a class inherits from an interface, the class has to do the implementation.
-
--   In a nutshell: A class that inherits from an interface must do an implementation of each interface it inherits from.
-    The end result is that a clas will have more properties or behaviours than it had before.
+Configuration with AppConnectionSettings
+This is where we fake a database connection string:
 
 ```csharp
 public class AppConnectionSettings : IConnection
 {
     public string ConnectionString { get; } = "server=db.cloud.com;port=1234;username=admin;password=suP3rPassw0rd";
 }
+```
 
+In a real app, this would come from something like appsettings.json or environment variables.
+
+Interfaces (Abstractions)
+
+```csharp
 public interface IDbContext
 {
     List<Model> CreateModels();
@@ -168,3 +183,20 @@ public interface IConnection
     string ConnectionString { get; }
 }
 ```
+
+These interfaces describe what the implementations must provide, but don’t include any logic themselves. This makes the app flexible — we can swap out one implementation for another without changing the rest of the code.
+
+Final Thoughts
+This small example shows how to:
+
+Use SimpleInjector to manage dependencies
+
+Register interfaces and classes in a container
+
+Separate logic across different files
+
+Use dependency injection to make the code easier to test and maintain
+
+We'll build on this by using appsettings.json and a more complete file structure in future parts.
+
+.... More to come...

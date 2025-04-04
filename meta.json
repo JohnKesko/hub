@@ -8,6 +8,6 @@
 	},
 	{
 		"title": "advanced",
-		"pages": ["index", "di-part-0"]
+		"pages": ["index", "basics", "advanced"]
 	}
 ]

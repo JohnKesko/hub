@@ -5,9 +5,9 @@ description: Start developing with C#
 
 ### The essentials:
 
--   C# was developed in 2000 by Anders Hejlsberg, who works at Microsoft.
+- C# was developed in 2000 by Anders Hejlsberg, who works at Microsoft.
 
--   C# code is compiled into a format called **Common Intermediate Language** (CIL).
+- C# code is compiled into a format called **Common Intermediate Language** (CIL).
 
 When you start writing C# and search online, you’ll often see terms like "MSIL", "ILC", or just "IL". All of them refer to the same thing — but the official name is **Common Intermediate Language**, or **CIL** for short.
 
@@ -15,10 +15,10 @@ To write C# code, we need a program (a compiler) that can read our source code a
 
 After that, the **CLR** (Common Language Runtime) steps in. The CLR is part of the .NET platform, and it translates the CIL code into native machine code so the computer can run it.
 
--   If you want to learn more about it, start here: https://en.wikipedia.org/wiki/Common_Intermediate_Language
-    > Disclaimer: When you start diving deeper into how this works, it can become a rabbit hole.  
-    > You might end up spending a lot of time trying to understand what compilers do, how they differ, and so on.  
-    > For most people, it’s enough to get a “helicopter view” of what the compiler does — more details will come naturally as you keep learning.
+- If you want to learn more about it, start here: https://en.wikipedia.org/wiki/Common_Intermediate_Language
+  > Disclaimer: When you start diving deeper into how this works, it can become a rabbit hole.  
+  > You might end up spending a lot of time trying to understand what compilers do, how they differ, and so on.  
+  > For most people, it’s enough to get a “helicopter view” of what the compiler does — more details will come naturally as you keep learning.
 
 ---
 
@@ -37,10 +37,10 @@ After that, the **CLR** (Common Language Runtime) steps in. The CLR is part of t
 
 ### The essentials of the .NET Platform
 
--   C# is the main language most developers use for .NET projects, but you can also use Visual Basic or F#.
-    However, do not use Visual Basic for modern development. Microsoft just recently announced they will not continue to develop Visual Basic anymore.
+- C# is the main language most developers use for .NET projects, but you can also use Visual Basic or F#.
+  However, do not use Visual Basic for modern development. Microsoft just recently announced they will not continue to develop Visual Basic anymore.
 
--   The ".NET Framework" is now generally referred to as the **.NET platform** or **.NET Core** in Microsoft documentation and online resources.
+- The ".NET Framework" is now generally referred to as the **.NET platform** or **.NET Core** in Microsoft documentation and online resources.
 
 This can be one of the most confusing parts for newcomers — you'll see ".NET" mentioned everywhere, combined with other terms like ASP.NET, .NET Framework, Console Application in .NET, WPF .NET, and so on.
 
@@ -52,21 +52,31 @@ So when we say **.NET is cross-platform**, we really mean it.
 
 ---
 
-> ### This is how to think about it:
+## How to think about it:
 
--   **.NET** is the base platform.  
-    Frameworks like **ASP.NET** are built on top of it — hence the "ASP" prefix in ASP.NET.  
-    You can start with a simple .NET Console Application (e.g., using .NET 9) and expand it into a web API, a desktop app, or anything else.
+- **.NET** is the base platform.  
+  The are multiple framework within the .NET platform.
 
--   The .NET platform consists of many smaller projects. Here's a high-level overview from Microsoft:
+For example:
+
+**ASP(.NET)** (Active Server Pages) - Web development <br />
+**WPF(.NET)** (Windows Presentation Foundation) <br />
+**MAUI(.NET)** (Multi-platform App UI) <br />
+**Xamarin(.NET)** (Cross-platform mobile development) - Was bought by Microsoft and is now known as MAUI. <br />
+**Blazor(.NET)** (Web development) <br />
+**WinForms(.NET)** (Building Desktop Applications)<br />
+
+You can start with a simple .NET Console Application (e.g., using .NET 9) and expand it into a web API, a desktop app, or anything else. <br />
+
+The .NET platform consists of many smaller projects. Here's a high-level overview from Microsoft:
 
 <img src="https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2024/11/buildanything.svg" />
 
-    Microsoft commits to maintaining and supporting LTS versions for longer periods, making them ideal for production use.
+Microsoft commits to maintaining and supporting LTS versions for longer periods, making them ideal for production use.
 
--   Microsoft releases a new .NET version every year. Every second version is typically marked as an **LTS** release.
+- Microsoft releases a new .NET version every year. Every second version is typically marked as an **LTS** release.
 
--   Major changes were introduced starting with .NET 5. Before that, .NET was very Microsoft-centric and not ideal for developing cross-platform apps. That changed with the unified platform.
+- Major changes were introduced starting with .NET 5. Before that, .NET was very Microsoft-centric and not ideal for developing cross-platform apps. That changed with the unified platform.
 
 ---
 
@@ -74,8 +84,8 @@ So when we say **.NET is cross-platform**, we really mean it.
 
 > How to write C#
 
--   C# includes built-in types like:  
-    `int`, `string`, `bool`, `char`, `float`, `double`
+- C# includes built-in types like:  
+  `int`, `string`, `bool`, `char`, `float`, `double`
 
 Examples:
 
