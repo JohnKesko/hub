@@ -1,0 +1,34 @@
+---
+title: txt.parts
+description: SaaS for sharing text, code and files based on using JWT tokens for creating temporary links.
+tags: [saas, jwt, token, share, text, code, file]
+---
+
+#### Super interesting project.<br />
+
+I had this idea for a while, but I never had the time to implement it. <br />
+The main reason was work related. I had to share some sensitive data with my coworkers, but I didn't want to use any third party service + I wanted to have the control myself.<br />
+
+It's currently in beta. It needs some refinement for the UX but the main idea is there. <br />
+
+Link:
+https://beta.txt.parts/
+
+#### How it works:
+
+1. You add some text or text + file you want to share<br />
+2. You select the expiration time (1 hour, 1 day, 1 week, 1 month) or whatever you want<br />
+3. Optional: Set **One-Time Link** or **Multi use**.<br />
+
+   - One-Time Link - the link will be destroyed after it's first fetch.<br />
+   - Multi use - the link will be deleted after the expiration time.
+
+4. Optional: Set password and/or IP-restrictions
+5. Click "Generate" and copy the link.
+
+### Tech stack:
+
+- Next.js for the frontend and backend.
+- NeonTech for DB
+- Redis for caching
+- AWS S3 for file storage
