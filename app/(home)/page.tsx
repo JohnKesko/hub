@@ -178,6 +178,11 @@ export default function HomePage() {
 					<p className="text-gray-500 text-sm md:text-left text-center leading-loose">
 						© {new Date().getFullYear()} DocHub. All rights reserved.
 					</p>
+					<div className="flex flex-col justify-center items-center">
+						<span className="text-[10px] text-muted-foreground text-center">
+							Any data on this website is proprietary and cannot be used for AI-training purposes.
+						</span>
+					</div>
 					<div className="flex items-center gap-4">
 						<Link href="/docs" className="text-gray-500 hover:text-blue-600 text-sm transition-colors">
 							Documentation
