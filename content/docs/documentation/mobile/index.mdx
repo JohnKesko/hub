@@ -1,0 +1,39 @@
+---
+title: Mobile Development
+description: How to develop a mobile app?
+---
+
+There are multiple steps invloved to develop a mobile app. It's not super complicated but a lot of moving parts that needs to be stiched together, hence why it can feel overwhelming.
+This guide is a helicopter view of the process, focusing on Expo (React Native) with deeper sub-sections for advanced concepts.
+
+## 1. Available Options
+
+Before diving into Expo, here are the main ways you can approach mobile development:
+
+## iOS (Native)
+**Languages:** Swift (modern) or Objective‑C (legacy) \
+**UI Frameworks:** SwiftUI (declarative) or UIKit (imperative) \
+**Pros:** Full access to Apple APIs, best performance, early access to new iOS features \
+**Cons:** Only runs on iOS devices; you’ll need a Mac and Xcode
+
+## Android (Native)
+**Languages:** Kotlin (preferred) or Java (legacy) \
+**UI Framework:** Jetpack Compose (declarative) or XML layouts \
+**Pros:** Full control over Android platform, best performance, direct access to native SDKs \
+**Cons:** Only runs on Android; requires Android Studio and managing multiple OS versions
+
+## Cross‑Platform (React Native)
+You write in JavaScript or in TypeScript and share code between iOS and Android.
+
+1. Expo: A framework using React Native to build an app for both iOS and Android. It is also a managed workflow with easy setup, over‑the‑air updates, and a rich plugin ecosystem. It will handle all certificates needed for iOS, which is very conveniant.
+2. React Native without Expo: Just use React Native as is without Expo. More flexibility for native modules, but requires native project configuration
+
+## Cross-Platform (.NET MAUI)
+Write in C# with .NET, targeting iOS and Android with native UI controls.
+
+## Flutter
+Single codebase in Dart, uses its own rendering engine
+Fast development cycle (hot reload) and consistent UI across platforms
+
+## Ionic/Cordova: 
+Web technologies (HTML/CSS/JS) wrapped in a native shell
